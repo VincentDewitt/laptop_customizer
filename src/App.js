@@ -1,13 +1,8 @@
 import React, { Component } from 'react';
 
-// Normalizes string as a slug - a string that is safe to use
-// in both URLs and html attributes
-import slugify from 'slugify';
 
 import './App.css';
-import Featureselected from './Featureselected';
-import FeatureSummary from './FeatureSummary';
-import headerFunct from './Header';
+import HeaderFunct from './Header';
 import Summarytotal from './SummaryTotal';
 import MainForm from './MainForm';
 import MainSummary from './MainSummary';
@@ -50,44 +45,6 @@ class App extends Component {
   };
 
   render() {
-    const features = Object.keys(this.props.features).map((feature, idx) => {
-      const featureHash = feature + '-' + idx;
-      const options = this.props.features[feature].map(item => {
-        const itemHash = slugify(JSON.stringify(item));
-        const itemCost = (USCurrencyFormat.format(item.cost))
-        return(
-            <Featureselected  itemHash={slugify(JSON.stringify(item))}
-            featureName={slugify(feature)}
-            itemName = {item.name}
-            selectedFeature = {this.state.selected[feature].name}
-            refreshFeature = {this.updateFeature} 
-           feature = {feature} item={item} 
-           itemCost= {itemCost}  />
-        )
-      });
-
-      return (
-        <fieldset className="feature" key={featureHash}>
-          <legend className="feature__name">
-            <h3>{feature}</h3>
-          </legend>
-          {options}
-        </fieldset>
-      );
-    });
-
-    const summary = Object.keys(this.state.selected).map((feature, idx) => {
-      const featureHash = feature + '-' + idx;
-      const selectedOption = this.state.selected[feature];
-      return (
-        <FeatureSummary 
-         featureoption = {featureHash}
-         featureoptionlabel = {feature}
-         featureoptionvalue = {selectedOption.name}
-         featureoptioncost = {USCurrencyFormat.format(selectedOption.cost)}
-          />
-      );
-    });
 
     const total = Object.keys(this.state.selected).reduce(
       (acc, curr) => acc + this.state.selected[curr].cost,
@@ -96,13 +53,12 @@ class App extends Component {
 
     return (
       <div className="App">
-       <headerFunct />
+       <HeaderFunct />
         <main>
-          <MainForm MainFormfeatures = {features} />
+          <MainForm  features = {this.props.features}
+           selected = {this.state.selected} updateFeature= {this.updateFeature} />
           <MainSummary
-            MainSummarySum = {summary} />
-            <Summarytotal
-            CurrancyFormat = {USCurrencyFormat.format(total)} /> 
+            selected= {this.state.selected} total={total} /> 
         </main>
       </div>
     );

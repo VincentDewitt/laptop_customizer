@@ -1,10 +1,10 @@
 import React from 'react'
 
-function headerFunct (props){
+function HeaderFunct (props){
     return(
     <header>
     <h1>ELF Computing | Laptops</h1>
     </header>
     )
 }
-export default headerFunct; 
+export default HeaderFunct; 
